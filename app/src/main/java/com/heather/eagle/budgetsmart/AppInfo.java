@@ -11,6 +11,7 @@ public class AppInfo {
     private static AppInfo instance = null;
     private static final String STRING_NAME = "some_name";
     private static final String STRING_COST = "some_cost";
+    private static final String BOOLEAN_STATUS = "some_status";
 
     protected AppInfo() {
         // Exists only to defeat instantiation.
@@ -19,6 +20,7 @@ public class AppInfo {
     // Here are some values we want to keep global.
     public String itemNameString;
     public String itemCostString;
+    public String itemStatusString;
 
     private Context my_context;
 

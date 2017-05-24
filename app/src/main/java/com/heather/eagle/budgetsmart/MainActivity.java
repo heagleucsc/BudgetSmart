@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "budgetSmart";
     public static TextView budgetCounter;
     public static String name;
-    public static String cost;     // later may want to deal with as double or int to change counter val
+    public static String cost;     // later may want to deal with as double or int to change counter value
+    public static String status;
 
     AppInfo appInfo;
     ListView lv;
@@ -38,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
     private class ListElement {
         ListElement() {};
 
-        ListElement(String name, String cost) {
+        ListElement(String name, String cost, String status) {
             this.name = name;
             this.cost = cost;
+            this.status = status;
         }
 
         public String name;
         public String cost;
+        public String status;
 
         public String getName() {
             return name;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         public String getCost() {
             return cost;
         }
+
+        public String getStatus() { return status; }
     }
 
     private class MyAdapter extends ArrayAdapter<ListElement> {
@@ -86,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             TextView tn = (TextView) newView.findViewById(R.id.itemName);
             TextView tc = (TextView) newView.findViewById(R.id.itemCost);
             tn.setText(w.name);
-            tc.setText(w.cost);
+            tc.setText("$" + w.cost);
 
             return newView;
         }
@@ -149,23 +154,26 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
         String listData = sp.getString("name", null);
         String listData2 = sp.getString("cost", null);
-        Log.d(LOG_TAG, "loadPrefs: listData listData2: " + listData + " " + listData2);
+        String listData3 = sp.getString("status", null);
+        Log.d(LOG_TAG, "loadPrefs: listData listData2: " + listData + " " + listData2 + " " + listData3);
+        Log.d(LOG_TAG, "loadPrefs: listData3: " + listData3);
 
 
-        if(listData!=null && listData2 !=null){
+        if(listData!=null && listData2 !=null && listData3 != null){
             String[] nameWords = listData.split(",");
             String[] costWords = listData2.split(",");
+            String[] statusWords = listData3.split(",");
             for (int k=0; k<nameWords.length; k++){
-                    Log.d(LOG_TAG, "item/cost array: " + nameWords[k] + " " + costWords[k]);
+                    Log.d(LOG_TAG, "item/cost array: " + nameWords[k] + " " + costWords[k] );
 
             }
 
             // Add item to list
             for(int i=0; i<nameWords.length; i++){
-                    aa.add(new ListElement(nameWords[i], costWords[i]));
+                    aa.add(new ListElement(nameWords[i], costWords[i], "optional"));
             }
             for (ListElement item : itemList){
-                Log.d(LOG_TAG, "inCurrentList: " + item.name + " " + item.cost);
+                Log.d(LOG_TAG, "inCurrentList: " + item.name + " " + item.cost + " " + item.status);
                 Log.d(LOG_TAG, "itemList size: " + itemList.size());
             }
         }

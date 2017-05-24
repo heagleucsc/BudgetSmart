@@ -47,25 +47,27 @@
         android:id="@+id/necButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Necessary"
-        android:layout_marginStart="85dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="85dp"
+        android:onClick="onClickNess"
+        android:text="Necessary"
+        app:layout_constraintBaseline_toBaselineOf="@+id/optButton"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintBaseline_toBaselineOf="@+id/optButton" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/optButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Optional"
+        android:layout_marginBottom="46dp"
         android:layout_marginEnd="87dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="46dp"
+        android:onClick="onClickOpt"
+        android:text="Optional"
         app:layout_constraintBottom_toTopOf="@+id/addSaveButton"
         app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintLeft_toRightOf="@+id/necButton" />
+        app:layout_constraintLeft_toRightOf="@+id/necButton"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/addSaveButton"
