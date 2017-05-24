@@ -17,46 +17,53 @@ public class ItemFormActivity extends AppCompatActivity {
     static final public String ITEM_NAME_STRING = "string_1";
     static final public String ITEM_COST_STRING = "string_2";
     private static final String LOG_TAG = "formActivity";
-
-    //private List<String> test;
+    public static StringBuilder sb1 = new StringBuilder();
+    public static StringBuilder sb2 = new StringBuilder();
+    String namesb = "";
+    String costsb = "";
+    AppInfo appInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_form);
-        //test = new ArrayList<String>();
+        appInfo = AppInfo.getInstance(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences settings = getSharedPreferences(MainActivity.MYPREFS, 0);
     }
 
     public void onSaveItem(View v){
-        // ** Still need to find a way to display list elements in MainActivity listview
-        // from these strings saved in sharedPreferences **
-
-        // was looking at: http://stackoverflow.com/questions/30072055/add-items-to-listview-from-other-activity
+        SharedPreferences sp = getSharedPreferences(MainActivity.MYPREFS, 0);
+        if(sb1.toString().equals("") || sb2.toString().equals("")){
+            sb1 = sb1.append(sp.getString("name", ""));
+            sb2 = sb2.append(sp.getString("cost", ""));
+        }
 
         EditText edv1 = (EditText) findViewById(R.id.itemName);
-        EditText edv2 = (EditText) findViewById(R.id.itemCost);
         String name = edv1.getText().toString();
+        namesb = sb1.append(name).append(",").toString();
+        Log.d(LOG_TAG, "namesb: " + namesb);
+
+
+        EditText edv2 = (EditText) findViewById(R.id.itemCost);
         String cost = edv2.getText().toString();
+        costsb = sb2.append(cost).append(",").toString();
 
-        SharedPreferences settings = getSharedPreferences(MainActivity.MYPREFS, 0);
-        SharedPreferences.Editor editor = settings.edit();
-
-        editor.putString(ITEM_NAME_STRING, name);
-        editor.putString(ITEM_COST_STRING, cost);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("name", namesb);
+        editor.putString("cost", costsb);
         editor.commit();
 
         Toast.makeText(getApplicationContext(),"Item added", Toast.LENGTH_SHORT).show();
 
         // Go back to main activity
         Intent intent = new Intent(this, MainActivity.class);
+        /*
         intent.putExtra("Name", name);
-        intent.putExtra("Cost", cost);
+        intent.putExtra("Cost", cost);*/
         Log.d(LOG_TAG,"Name and cost added:" + name + cost);
         startActivity(intent);
     }
@@ -64,9 +71,7 @@ public class ItemFormActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         Intent intent = new Intent(this, MainActivity.class);
-        //intent.putStringArrayListExtra("test", (ArrayList<String>) test);
         startActivity(intent);
     }
 }

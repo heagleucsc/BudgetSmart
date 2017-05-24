@@ -1,8 +1,10 @@
 package com.heather.eagle.budgetsmart;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "budgetSmart";
     public static TextView budgetCounter;
     public static String name;
-    public static String cost;     // may want to deal with as double to change counter
+    public static String cost;     // later may want to deal with as double or int to change counter val
 
     AppInfo appInfo;
     ListView lv;
@@ -95,23 +97,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        appInfo = AppInfo.getInstance(this);
 
         budgetCounter = (TextView) findViewById(R.id.budgetCurrent);
         lv = (ListView) findViewById(R.id.listView);
 
-        final Button saveButton = (Button) findViewById(R.id.addSaveButton);
-
-        //appInfo = AppInfo.getInstance(this);
-        //itemList = new ArrayList<ListElement>();
-        getNewItemData();
+        //getNewItemData();
         aa = new MyAdapter(this, R.layout.list_element, itemList);
-        /*Bundle extras = getIntent().getExtras();
-        if (getIntent().getStringExtra("Name") != null && getIntent().getStringExtra("Cost") != null){
-            name = extras.getString("Name");
-            cost = extras.getString("Cost");
-            itemList.add(new ListElement(name, cost));
-            Log.d(LOG_TAG, "onCreate: name and cost added from form activity: " + name + cost);
-        }*/
+        //loadPreferences();
         lv.setAdapter(aa);
         aa.notifyDataSetChanged();
     }
@@ -119,17 +112,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        SharedPreferences settings = getSharedPreferences(MainActivity.MYPREFS, 0);
-
-        lv = (ListView) findViewById(R.id.listView);
-        String itemText1 = settings.getString(ItemFormActivity.ITEM_NAME_STRING, "");
-        String itemText2 = settings.getString(ItemFormActivity.ITEM_COST_STRING, "");
-
+        loadPreferences();
     }
 
     public void getNewItemData() {
         //intent.putExtra("new item", );
         //ArrayList<String> test = getIntent().getStringArrayListExtra("test");
+
+        // Irrelevant now since we're using SharedPrefs
+/*
         Bundle extras = getIntent().getExtras();
         if (getIntent().getStringExtra("Name") != null && getIntent().getStringExtra("Cost") != null){
             name = extras.getString("Name");
@@ -140,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "item in list: " + item.name + " " + item.cost);
             }
         }
+*/
+
+
     }
 
     public void onClickAdd(View v) {
@@ -149,4 +143,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void decrementCounter(){}
+
+    protected void loadPreferences(){
+        itemList.clear();
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        String listData = sp.getString("name", null);
+        String listData2 = sp.getString("cost", null);
+        Log.d(LOG_TAG, "loadPrefs: listData listData2: " + listData + " " + listData2);
+
+
+        if(listData!=null && listData2 !=null){
+            String[] nameWords = listData.split(",");
+            String[] costWords = listData2.split(",");
+            for (int k=0; k<nameWords.length; k++){
+                    Log.d(LOG_TAG, "item/cost array: " + nameWords[k] + " " + costWords[k]);
+
+            }
+
+            // Add item to list
+            for(int i=0; i<nameWords.length; i++){
+                    aa.add(new ListElement(nameWords[i], costWords[i]));
+            }
+            for (ListElement item : itemList){
+                Log.d(LOG_TAG, "inCurrentList: " + item.name + " " + item.cost);
+                Log.d(LOG_TAG, "itemList size: " + itemList.size());
+            }
+        }
+
+        aa.notifyDataSetChanged();
+
+    }
 }
