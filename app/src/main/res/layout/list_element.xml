@@ -11,4 +11,13 @@
         android:text="Item Name"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/itemCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:textSize="20sp" />
+
+
+
 </LinearLayout>
