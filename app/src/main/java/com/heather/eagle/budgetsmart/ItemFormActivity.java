@@ -40,7 +40,6 @@ public class ItemFormActivity extends AppCompatActivity {
     }
 
 
-    // Need to do:
     public void onSaveItem(View v){
         SharedPreferences sp = getSharedPreferences(MainActivity.MYPREFS, 0);
 
@@ -55,8 +54,6 @@ public class ItemFormActivity extends AppCompatActivity {
             sb3 = new StringBuilder(sp.getString("status", ""));
         }
 
-
-        //if(sb1 != )
         // Add new item details to corresponding strings (name,cost,nec/opt)
         EditText edv1 = (EditText) findViewById(R.id.itemName);
         String name = edv1.getText().toString();
@@ -68,11 +65,21 @@ public class ItemFormActivity extends AppCompatActivity {
         costsb = sb2.append(cost).append(",").toString();
         statussb = sb3.append(status).append(",").toString();
 
+        //update budget variable
+        int budget = sp.getInt("budget", 0);
+        budget = budget - Integer.parseInt(cost);
+        if(budget < 0){
+            //
+        }
+
+        /* still need to: make sure null or comma values not accepted */
+
         // Save to memory
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("name", namesb);
         editor.putString("cost", costsb);
         editor.putString ("status", statussb);
+        editor.putInt("budget", budget);
         editor.commit();
 
         Toast.makeText(getApplicationContext(),"Item added", Toast.LENGTH_SHORT).show();

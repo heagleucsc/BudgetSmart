@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "budgetSmart";
     public static TextView budgetCounter;
     public static String name;
-    public static String cost;     // later may want to deal with as double or int to change counter value
+    public static String cost;     // later may want to deal with as double?
     public static String status;
 
     AppInfo appInfo;
@@ -102,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
             deleteBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    // do something
                     Log.d(LOG_TAG, "delete btn pressed");
                     final int position = lv.getPositionForView((View) v.getParent());
                     Log.d(LOG_TAG, "position: " + position);
                     removeElement(position);
                     //decrementCounter(position);
+                    refreshCtr();
                     notifyDataSetChanged();
                 }
             });
@@ -126,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
         budgetCounter = (TextView) findViewById(R.id.budgetCurrent);
         lv = (ListView) findViewById(R.id.listView);
 
-        //getNewItemData();
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        String currentBudget = "$" + sp.getInt("budget", 0);
+        ((TextView)findViewById(R.id.budgetCurrent)).setText(currentBudget);
+
         aa = new MyAdapter(this, R.layout.list_element, itemList);
         //loadPreferences();
         lv.setAdapter(aa);
@@ -164,6 +167,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Refresh budget counter
+    public void refreshCtr() {
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        String currentBudget = "$" + sp.getInt("budget", 0);
+        ((TextView)findViewById(R.id.budgetCurrent)).setText(currentBudget);
+    }
+
     // Remove from list and memory
     public void removeElement(int pos){
         itemList.remove(pos);
@@ -175,45 +185,41 @@ public class MainActivity extends AppCompatActivity {
         String[] costWords = sp.getString("cost", null).split(",");
         String[] statusWords = sp.getString("status", null).split(",");
 
-        // Remove chosen item at index pos from array, then reconstruct new string
-        String[] nameNew = ArrayUtils.remove(nameWords, pos);
-        String[] costNew = ArrayUtils.remove(costWords, pos);
-        String[] statusNew = ArrayUtils.remove(statusWords, pos);
-        Log.d(LOG_TAG, "new arrays: " + Arrays.toString(nameNew) + "\n" + Arrays.toString(costNew) + "\n" + Arrays.toString(statusNew));
+        if(nameWords!=null && nameWords.length>0) {
 
-        StringBuilder bName = new StringBuilder();
-        StringBuilder bCost = new StringBuilder();
-        StringBuilder bStatus = new StringBuilder();
+            // Update budget (increase)
+            int budget = sp.getInt("budget", 0);
+            budget = budget + Integer.parseInt(costWords[pos]);
+            // if(budget < 0){ }
+            Log.d(LOG_TAG, "new budget: " + budget);
 
-        for(int i=0; i<nameNew.length; i++){
-            bName = bName.append(nameNew[i]).append(",");
-            bCost = bCost.append(costNew[i]).append(",");
-            bStatus = bStatus.append(statusNew[i]).append(",");
+            // Remove chosen item at index pos from array, then reconstruct new string
+            String[] nameNew = ArrayUtils.remove(nameWords, pos);
+            String[] costNew = ArrayUtils.remove(costWords, pos);
+            String[] statusNew = ArrayUtils.remove(statusWords, pos);
+            Log.d(LOG_TAG, "new arrays: " + Arrays.toString(nameNew) + "\n" + Arrays.toString(costNew) + "\n" + Arrays.toString(statusNew));
+
+            StringBuilder bName = new StringBuilder();
+            StringBuilder bCost = new StringBuilder();
+            StringBuilder bStatus = new StringBuilder();
+
+            for (int i = 0; i < nameNew.length; i++) {
+                bName = bName.append(nameNew[i]).append(",");
+                bCost = bCost.append(costNew[i]).append(",");
+                bStatus = bStatus.append(statusNew[i]).append(",");
+            }
+
+            Log.d(LOG_TAG, "stringbuilder test:" + bName.toString() + " " + bCost.toString() + " " + bStatus.toString());
+
+            // Update to memory
+            editor.clear();
+            editor.putString("name", bName.toString());
+            editor.putString("cost", bCost.toString());
+            editor.putString("status", bStatus.toString());
+            editor.putInt("budget", budget);
+            editor.commit();
         }
-
-        Log.d(LOG_TAG, "stringbuilder test:" + bName.toString() + " " + bCost.toString() + " " + bStatus.toString());
-
-        // Update to memory
-        editor.clear();
-        editor.putString("name", bName.toString());
-        editor.putString("cost", bCost.toString());
-        editor.putString("status", bStatus.toString());
-        editor.commit();
-
         //decrementCounter(pos);
-    }
-/*
-    public void decrementCounter(int pos){
-    }*/
-
-    public int getIndex(String str, String substr, int n){
-        int indexCtr = 0, index = 0;
-
-        while(indexCtr < n && index != -1) {
-            index = str.indexOf(substr, index + 1);
-            indexCtr++;
-        }
-        return index;
     }
 
     // Repopulate list
@@ -226,11 +232,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "loadPrefs: listData listData2: " + listData + " " + listData2 + " " + listData3);
         Log.d(LOG_TAG, "loadPrefs: listData3: " + listData3);
 
+        refreshCtr();
+
         // Parse strings
         if(listData!=null && listData2 !=null && listData3 != null){
             String[] nameWords = listData.split(",");
             String[] costWords = listData2.split(",");
             String[] statusWords = listData3.split(",");
+            // Split returns at least one element so need to prevent showing empty string
+            if(nameWords[0].equals("")) return;
             for (int k=0; k<nameWords.length; k++){
                     Log.d(LOG_TAG, "item/cost array: " + nameWords[k] + " " + costWords[k] );
 
