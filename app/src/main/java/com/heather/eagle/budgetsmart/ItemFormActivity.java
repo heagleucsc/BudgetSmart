@@ -39,26 +39,36 @@ public class ItemFormActivity extends AppCompatActivity {
         super.onResume();
     }
 
+
+    // Need to do:
     public void onSaveItem(View v){
         SharedPreferences sp = getSharedPreferences(MainActivity.MYPREFS, 0);
+
+        // Load saved strings
         if(sb1.toString().equals("") || sb2.toString().equals("") || sb3.toString().equals("")){
             sb1 = sb1.append(sp.getString("name", ""));
             sb2 = sb2.append(sp.getString("cost", ""));
             sb3 = sb3.append(sp.getString("status", ""));
+        }else{
+            sb1 = new StringBuilder(sp.getString("name", ""));
+            sb2 = new StringBuilder(sp.getString("cost", ""));
+            sb3 = new StringBuilder(sp.getString("status", ""));
         }
 
+
+        //if(sb1 != )
+        // Add new item details to corresponding strings (name,cost,nec/opt)
         EditText edv1 = (EditText) findViewById(R.id.itemName);
         String name = edv1.getText().toString();
         namesb = sb1.append(name).append(",").toString();
         Log.d(LOG_TAG, "namesb: " + namesb);
 
-
         EditText edv2 = (EditText) findViewById(R.id.itemCost);
         String cost = edv2.getText().toString();
         costsb = sb2.append(cost).append(",").toString();
-
         statussb = sb3.append(status).append(",").toString();
 
+        // Save to memory
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("name", namesb);
         editor.putString("cost", costsb);
@@ -69,9 +79,6 @@ public class ItemFormActivity extends AppCompatActivity {
 
         // Go back to main activity
         Intent intent = new Intent(this, MainActivity.class);
-        /*
-        intent.putExtra("Name", name);
-        intent.putExtra("Cost", cost);*/
         Log.d(LOG_TAG,"Name and cost added:" + name + cost);
         startActivity(intent);
     }

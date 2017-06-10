@@ -20,7 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,8 +93,24 @@ public class MainActivity extends AppCompatActivity {
             // Fills in the view.
             TextView tn = (TextView) newView.findViewById(R.id.itemName);
             TextView tc = (TextView) newView.findViewById(R.id.itemCost);
+            Button deleteBtn = (Button) newView.findViewById(R.id.btn_del);
             tn.setText(w.name);
             tc.setText("$" + w.cost);
+
+
+            // Remove item from list when delete button pressed
+            deleteBtn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    // do something
+                    Log.d(LOG_TAG, "delete btn pressed");
+                    final int position = lv.getPositionForView((View) v.getParent());
+                    Log.d(LOG_TAG, "position: " + position);
+                    removeElement(position);
+                    //decrementCounter(position);
+                    notifyDataSetChanged();
+                }
+            });
 
             return newView;
         }
@@ -137,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 */
-
-
     }
 
     public void onClickAdd(View v) {
@@ -147,8 +164,59 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void decrementCounter(){}
+    // Remove from list and memory
+    public void removeElement(int pos){
+        itemList.remove(pos);
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        SharedPreferences.Editor editor = sp.edit();
 
+        // Get strings from memory and parse
+        String[] nameWords = sp.getString("name", null).split(",");
+        String[] costWords = sp.getString("cost", null).split(",");
+        String[] statusWords = sp.getString("status", null).split(",");
+
+        // Remove chosen item at index pos from array, then reconstruct new string
+        String[] nameNew = ArrayUtils.remove(nameWords, pos);
+        String[] costNew = ArrayUtils.remove(costWords, pos);
+        String[] statusNew = ArrayUtils.remove(statusWords, pos);
+        Log.d(LOG_TAG, "new arrays: " + Arrays.toString(nameNew) + "\n" + Arrays.toString(costNew) + "\n" + Arrays.toString(statusNew));
+
+        StringBuilder bName = new StringBuilder();
+        StringBuilder bCost = new StringBuilder();
+        StringBuilder bStatus = new StringBuilder();
+
+        for(int i=0; i<nameNew.length; i++){
+            bName = bName.append(nameNew[i]).append(",");
+            bCost = bCost.append(costNew[i]).append(",");
+            bStatus = bStatus.append(statusNew[i]).append(",");
+        }
+
+        Log.d(LOG_TAG, "stringbuilder test:" + bName.toString() + " " + bCost.toString() + " " + bStatus.toString());
+
+        // Update to memory
+        editor.clear();
+        editor.putString("name", bName.toString());
+        editor.putString("cost", bCost.toString());
+        editor.putString("status", bStatus.toString());
+        editor.commit();
+
+        //decrementCounter(pos);
+    }
+/*
+    public void decrementCounter(int pos){
+    }*/
+
+    public int getIndex(String str, String substr, int n){
+        int indexCtr = 0, index = 0;
+
+        while(indexCtr < n && index != -1) {
+            index = str.indexOf(substr, index + 1);
+            indexCtr++;
+        }
+        return index;
+    }
+
+    // Repopulate list
     protected void loadPreferences(){
         itemList.clear();
         SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
@@ -158,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "loadPrefs: listData listData2: " + listData + " " + listData2 + " " + listData3);
         Log.d(LOG_TAG, "loadPrefs: listData3: " + listData3);
 
-
+        // Parse strings
         if(listData!=null && listData2 !=null && listData3 != null){
             String[] nameWords = listData.split(",");
             String[] costWords = listData2.split(",");
@@ -170,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Add item to list
             for(int i=0; i<nameWords.length; i++){
-                    aa.add(new ListElement(nameWords[i], costWords[i], "optional"));
+                    aa.add(new ListElement(nameWords[i], costWords[i], statusWords[i]));
             }
             for (ListElement item : itemList){
                 Log.d(LOG_TAG, "inCurrentList: " + item.name + " " + item.cost + " " + item.status);
@@ -179,6 +247,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         aa.notifyDataSetChanged();
-
     }
 }

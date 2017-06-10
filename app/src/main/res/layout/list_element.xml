@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/itemName"
@@ -18,6 +19,11 @@
         android:text="Item Name"
         android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/btn_del"
+        android:layout_width="113dp"
+        android:layout_height="wrap_content"
+        android:text="Delete" />
 
 
 </LinearLayout>
