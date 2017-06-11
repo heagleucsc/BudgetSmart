@@ -2,12 +2,16 @@ package com.heather.eagle.budgetsmart;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,17 +66,27 @@ public class ItemFormActivity extends AppCompatActivity {
 
         EditText edv2 = (EditText) findViewById(R.id.itemCost);
         String cost = edv2.getText().toString();
-        costsb = sb2.append(cost).append(",").toString();
+        // Round double up to nearest dollar
+        int costp = (int) Math.ceil(Double.parseDouble(cost));
+        costsb = sb2.append(String.valueOf(costp)).append(",").toString();
         statussb = sb3.append(status).append(",").toString();
+
+        /* make sure null, comma, etc values not accepted */
+        if(name == null | name.equals("") | cost == null | cost.equals("")) {
+            Toast.makeText(getApplicationContext(),"Please enter an item name/cost.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(name.contains(",") | cost.contains(",") | cost.contains("-") | !NumberUtils.isNumber(cost)){
+            Toast.makeText(getApplicationContext(),"Please change your item name or cost value.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         //update budget variable
         int old_budget = sp.getInt("budget", 0);
-        int budget = old_budget - Integer.parseInt(cost);
+        int budget = old_budget - costp;
         if(budget < 0){
             //
         }
-
-        /* still need to: make sure null or comma values not accepted */
 
         // Save to memory
         SharedPreferences.Editor editor = sp.edit();
@@ -91,13 +105,9 @@ public class ItemFormActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickOpt(View v){
-        status = "optional";
-    }
+    public void onClickOpt(View v){ status = "optional"; }
 
-    public void onClickNess(View v){
-        status = "necessary";
-    }
+    public void onClickNess(View v){ status = "necessary"; }
 
 
     @Override
