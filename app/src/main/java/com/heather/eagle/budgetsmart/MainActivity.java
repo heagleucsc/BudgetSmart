@@ -1,5 +1,6 @@
 package com.heather.eagle.budgetsmart;
 
+import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "position: " + position);
                     removeElement(position);
                     //decrementCounter(position);
-                    refreshCtr();
+                    //refreshCtr();
                     notifyDataSetChanged();
                 }
             });
@@ -125,10 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         budgetCounter = (TextView) findViewById(R.id.budgetCurrent);
         lv = (ListView) findViewById(R.id.listView);
-
-        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
-        String currentBudget = "$" + sp.getInt("budget", 0);
-        ((TextView)findViewById(R.id.budgetCurrent)).setText(currentBudget);
+        refreshCtr();
 
         aa = new MyAdapter(this, R.layout.list_element, itemList);
         //loadPreferences();
@@ -174,6 +172,21 @@ public class MainActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.budgetCurrent)).setText(currentBudget);
     }
 
+
+    public void animateCtr(int initVal, int finVal, final TextView tv){
+        ValueAnimator valAnim = ValueAnimator.ofInt(initVal, finVal);
+        valAnim.setDuration(900);
+
+        valAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+            @Override
+            public void onAnimationUpdate(ValueAnimator valAnim){
+                tv.setText("$" + valAnim.getAnimatedValue().toString());
+            }
+        });
+        valAnim.start();
+
+    }
+
     // Remove from list and memory
     public void removeElement(int pos){
         itemList.remove(pos);
@@ -189,9 +202,10 @@ public class MainActivity extends AppCompatActivity {
 
             // Update budget (increase)
             int budget = sp.getInt("budget", 0);
-            budget = budget + Integer.parseInt(costWords[pos]);
+            int budgetNew = budget + Integer.parseInt(costWords[pos]);
+            animateCtr(budget, budgetNew, (TextView)findViewById(R.id.budgetCurrent));
             // if(budget < 0){ }
-            Log.d(LOG_TAG, "new budget: " + budget);
+            Log.d(LOG_TAG, "new budget: " + budgetNew);
 
             // Remove chosen item at index pos from array, then reconstruct new string
             String[] nameNew = ArrayUtils.remove(nameWords, pos);
@@ -216,7 +230,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("name", bName.toString());
             editor.putString("cost", bCost.toString());
             editor.putString("status", bStatus.toString());
-            editor.putInt("budget", budget);
+            editor.putInt("old_budget", budget);
+            editor.putInt("budget", budgetNew);
             editor.commit();
         }
         //decrementCounter(pos);
@@ -226,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
     protected void loadPreferences(){
         itemList.clear();
         SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        TextView tv = (TextView)findViewById(R.id.budgetCurrent);
         String listData = sp.getString("name", null);
         String listData2 = sp.getString("cost", null);
         String listData3 = sp.getString("status", null);
@@ -236,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Parse strings
         if(listData!=null && listData2 !=null && listData3 != null){
+            //animateCtr(sp.getInt("old_budget", 0), sp.getInt("budget", 0), tv);
             String[] nameWords = listData.split(",");
             String[] costWords = listData2.split(",");
             String[] statusWords = listData3.split(",");

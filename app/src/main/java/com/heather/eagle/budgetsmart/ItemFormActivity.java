@@ -66,8 +66,8 @@ public class ItemFormActivity extends AppCompatActivity {
         statussb = sb3.append(status).append(",").toString();
 
         //update budget variable
-        int budget = sp.getInt("budget", 0);
-        budget = budget - Integer.parseInt(cost);
+        int old_budget = sp.getInt("budget", 0);
+        int budget = old_budget - Integer.parseInt(cost);
         if(budget < 0){
             //
         }
@@ -79,6 +79,7 @@ public class ItemFormActivity extends AppCompatActivity {
         editor.putString("name", namesb);
         editor.putString("cost", costsb);
         editor.putString ("status", statussb);
+        editor.putInt("old_budget", old_budget);
         editor.putInt("budget", budget);
         editor.commit();
 
