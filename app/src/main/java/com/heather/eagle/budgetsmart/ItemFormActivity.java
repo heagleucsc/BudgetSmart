@@ -61,25 +61,29 @@ public class ItemFormActivity extends AppCompatActivity {
         // Add new item details to corresponding strings (name,cost,nec/opt)
         EditText edv1 = (EditText) findViewById(R.id.itemName);
         String name = edv1.getText().toString();
+        //Log.d(LOG_TAG, "name" + name);
         namesb = sb1.append(name).append(",").toString();
         Log.d(LOG_TAG, "namesb: " + namesb);
 
         EditText edv2 = (EditText) findViewById(R.id.itemCost);
         String cost = edv2.getText().toString();
-        // Round double up to nearest dollar
-        int costp = (int) Math.ceil(Double.parseDouble(cost));
-        costsb = sb2.append(String.valueOf(costp)).append(",").toString();
-        statussb = sb3.append(status).append(",").toString();
+        //Log.d(LOG_TAG, "cost: " + cost);
 
         /* make sure null, comma, etc values not accepted */
         if(name == null | name.equals("") | cost == null | cost.equals("")) {
-            Toast.makeText(getApplicationContext(),"Please enter an item name/cost.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Please enter an item name and cost.", Toast.LENGTH_SHORT).show();
             return;
         }
         if(name.contains(",") | cost.contains(",") | cost.contains("-") | !NumberUtils.isNumber(cost)){
             Toast.makeText(getApplicationContext(),"Please change your item name or cost value.", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Round double up to nearest dollar
+        int costp = (int) Math.ceil(Double.parseDouble(cost));
+        costsb = sb2.append(String.valueOf(costp)).append(",").toString();
+        statussb = sb3.append(status).append(",").toString();
+
 
         //update budget variable
         int old_budget = sp.getInt("budget", 0);
