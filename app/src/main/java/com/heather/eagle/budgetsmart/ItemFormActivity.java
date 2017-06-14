@@ -136,7 +136,6 @@ public class ItemFormActivity extends AppCompatActivity {
 
     public void onClickNess(View v){ status = "necessary"; }
 
-
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
