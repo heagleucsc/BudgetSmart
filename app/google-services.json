@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "4595266072",
+    "firebase_url": "https://budgetsmart-ad3d8.firebaseio.com",
+    "project_id": "budgetsmart-ad3d8",
+    "storage_bucket": "budgetsmart-ad3d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4595266072:android:56167f176d32e520",
+        "android_client_info": {
+          "package_name": "com.heather.eagle.budgetsmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4595266072-p4mge7hevbnqa6beiku6jcleumi3ng1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heather.eagle.budgetsmart",
+            "certificate_hash": "fae37679b5df20856866b601478b1f3bda630511"
+          }
+        },
+        {
+          "client_id": "4595266072-afm2e7fucad63ca8biq5nnob2mg5ic06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsbxr0d4pWu3-ch6TnaLsin9Qegz0gZKQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4595266072-afm2e7fucad63ca8biq5nnob2mg5ic06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

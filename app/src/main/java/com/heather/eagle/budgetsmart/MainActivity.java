@@ -275,4 +275,12 @@ public class MainActivity extends AppCompatActivity {
 
         aa.notifyDataSetChanged();
     }
+
+    // logout.
+    public void onLogOut(View v){
+        firebaseAuth.signOut();
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+    }
+
 }
