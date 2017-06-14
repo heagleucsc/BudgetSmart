@@ -21,6 +21,7 @@
         <activity android:name=".PieChartActivity" />
         <activity android:name=".SignUp"/>
         <activity android:name=".OverBudget"></activity>
+        <activity anroid:name=".intro_budget"></activity>
     </application>
 
 </manifest>
