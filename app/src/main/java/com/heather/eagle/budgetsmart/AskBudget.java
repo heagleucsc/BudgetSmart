@@ -18,26 +18,30 @@ import static com.heather.eagle.budgetsmart.MainActivity.MYPREFS;
 
 public class AskBudget extends AppCompatActivity {
     private static final String LOG_TAG = "AskBudget";
+    public static final String PREFS = "prefs";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ask_budget);
-/*
-        SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+
+        SharedPreferences pref = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = pref.edit();
+
         if(pref.getBoolean("activity_executed", false)){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         } else {
-            SharedPreferences.Editor ed = pref.edit();
             ed.putBoolean("activity_executed", true);
             ed.commit();
-        }*/
+        }
     }
 
     public void onSaveBudget(View v) {
+        SharedPreferences pref = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
 
         EditText ed = (EditText) findViewById(R.id.editBudgetV);
         String budgetVal = ed.getText().toString();
@@ -46,6 +50,8 @@ public class AskBudget extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("initBudget", budgetVal);
         intent.putExtras(bundle);
+        editor.putBoolean("activity_executed", true);
+        editor.commit();
         startActivity(intent);
     }
 
