@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String MYPREFS = "myprefs";
     private static final String LOG_TAG = "budgetSmart";
+    public static int initBudget = 500;
+    public static int budgetEverSetChecker = 1;
     public static TextView budgetCounter;
     public static String name;
     public static String cost;     // later may want to deal with as double?
@@ -139,6 +141,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         appInfo = AppInfo.getInstance(this);
+
+        // Set initial budget
+        if(budgetEverSetChecker == 1) {
+            SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putInt("budget", initBudget);
+            Log.d(LOG_TAG, "initial budget: " + initBudget);
+            editor.commit();
+            budgetEverSetChecker = 0;
+        }
 
         // Set and configure navigation drawer
         mDrawerList = (ListView)findViewById(R.id.navList);
