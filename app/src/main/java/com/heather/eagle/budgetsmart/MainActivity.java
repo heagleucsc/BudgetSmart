@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
+
+    NavigationView navigation;
 
     AppInfo appInfo;
     ListView lv;
@@ -146,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        //navigation = (NavigationView) findViewById(R.id.navigation_view);
+
         budgetCounter = (TextView) findViewById(R.id.budgetCurrent);
         lv = (ListView) findViewById(R.id.listView);
         refreshCtr();
@@ -164,7 +169,16 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "You're a budgeting star!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "You're a budgeting star!", Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "setOnItemClickListener: position: " + position);
+                switch(position){
+                    case 0:
+                        Intent intent = new Intent(MainActivity.this, PieChartActivity.class);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
@@ -211,8 +225,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Log.d(LOG_TAG, "nav item id: " + id);
 
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -339,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
     protected void loadPreferences(){
         itemList.clear();
         SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
-        TextView tv = (TextView)findViewById(R.id.budgetCurrent);
+        //TextView tv = (TextView)findViewById(R.id.budgetCurrent);
         String listData = sp.getString("name", null);
         String listData2 = sp.getString("cost", null);
         String listData3 = sp.getString("status", null);
