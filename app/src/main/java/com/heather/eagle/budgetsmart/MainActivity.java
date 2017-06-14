@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             //editor.putInt("budget", initBudget);
             //Log.d(LOG_TAG, "initial budget: " + initBudget);
             editor.putInt("budget", budget);
+            editor.putInt("budgetSet", 1);
             Log.d(LOG_TAG, "initial budget: " + budget);
             editor.commit();
             budgetEverSetChecker = 0;
