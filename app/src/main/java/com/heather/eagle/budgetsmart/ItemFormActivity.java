@@ -1,5 +1,6 @@
 package com.heather.eagle.budgetsmart;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -7,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +19,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.R.attr.id;
 
 public class ItemFormActivity extends AppCompatActivity {
 
@@ -25,9 +31,11 @@ public class ItemFormActivity extends AppCompatActivity {
     public static StringBuilder sb1 = new StringBuilder();
     public static StringBuilder sb2 = new StringBuilder();
     public static StringBuilder sb3 = new StringBuilder();
+    public static StringBuilder sb4 = new StringBuilder();
     String namesb = "";
     String costsb = "";
     String statussb = "";
+    String categorysb = "";
     String status = "optional";
     AppInfo appInfo;
 
@@ -36,6 +44,11 @@ public class ItemFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_form);
         appInfo = AppInfo.getInstance(this);
+
+        Spinner s1 = (Spinner) findViewById(R.id.spinner1);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categ_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s1.setAdapter(adapter);
     }
 
     @Override
@@ -43,19 +56,20 @@ public class ItemFormActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
     public void onSaveItem(View v){
         SharedPreferences sp = getSharedPreferences(MainActivity.MYPREFS, 0);
 
         // Load saved strings
-        if(sb1.toString().equals("") || sb2.toString().equals("") || sb3.toString().equals("")){
+        if(sb1.toString().equals("") || sb2.toString().equals("") || sb3.toString().equals("") || sb4.toString().equals("")){
             sb1 = sb1.append(sp.getString("name", ""));
             sb2 = sb2.append(sp.getString("cost", ""));
             sb3 = sb3.append(sp.getString("status", ""));
+            sb4 = sb4.append(sp.getString("category", ""));
         }else{
             sb1 = new StringBuilder(sp.getString("name", ""));
             sb2 = new StringBuilder(sp.getString("cost", ""));
             sb3 = new StringBuilder(sp.getString("status", ""));
+            sb4 = new StringBuilder(sp.getString("category", ""));
         }
 
         // Add new item details to corresponding strings (name,cost,nec/opt)
@@ -68,6 +82,13 @@ public class ItemFormActivity extends AppCompatActivity {
         EditText edv2 = (EditText) findViewById(R.id.itemCost);
         String cost = edv2.getText().toString();
         //Log.d(LOG_TAG, "cost: " + cost);
+
+        // Retrieve drop-down menu value
+        Spinner spinner1 = (Spinner) findViewById(R.id.spinner1);
+        String spinnerVal = spinner1.getSelectedItem().toString();
+        categorysb = sb4.append(spinnerVal).append(",").toString();
+        Log.d(LOG_TAG, "Category: " + spinnerVal);
+        Log.d(LOG_TAG,"categorysb: " + categorysb);
 
         /* make sure null, comma, etc values not accepted */
         if(name == null | name.equals("") | cost == null | cost.equals("")) {
@@ -92,11 +113,13 @@ public class ItemFormActivity extends AppCompatActivity {
             //
         }
 
+
         // Save to memory
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("name", namesb);
         editor.putString("cost", costsb);
         editor.putString ("status", statussb);
+        editor.putString("category", categorysb);
         editor.putInt("old_budget", old_budget);
         editor.putInt("budget", budget);
         editor.commit();

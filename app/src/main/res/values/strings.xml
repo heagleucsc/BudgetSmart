@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BudgetSmart</string>
+    <string-array name="categ_array">
+        <item>Food</item>
+        <item>Rent/Utilities</item>
+        <item>Entertainment</item>
+        <item>Transportation</item>
+        <item>Clothing</item>
+        <item>Misc</item>
+    </string-array>
 </resources>

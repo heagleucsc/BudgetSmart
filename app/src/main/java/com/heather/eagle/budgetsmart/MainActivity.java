@@ -43,25 +43,26 @@ public class MainActivity extends AppCompatActivity {
     private class ListElement {
         ListElement() {};
 
-        ListElement(String name, String cost, String status) {
+        ListElement(String name, String cost, String status, String category) {
             this.name = name;
             this.cost = cost;
             this.status = status;
+            this.category = category;
         }
 
         public String name;
         public String cost;
         public String status;
+        public String category;
 
         public String getName() {
             return name;
         }
-
         public String getCost() {
             return cost;
         }
-
         public String getStatus() { return status; }
+        public String getCateg() { return category; }
     }
 
     private class MyAdapter extends ArrayAdapter<ListElement> {
@@ -197,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         String[] nameWords = sp.getString("name", null).split(",");
         String[] costWords = sp.getString("cost", null).split(",");
         String[] statusWords = sp.getString("status", null).split(",");
+        String[] categWords = sp.getString("category", null).split(",");
 
         if(nameWords!=null && nameWords.length>0) {
 
@@ -211,25 +213,30 @@ public class MainActivity extends AppCompatActivity {
             String[] nameNew = ArrayUtils.remove(nameWords, pos);
             String[] costNew = ArrayUtils.remove(costWords, pos);
             String[] statusNew = ArrayUtils.remove(statusWords, pos);
-            Log.d(LOG_TAG, "new arrays: " + Arrays.toString(nameNew) + "\n" + Arrays.toString(costNew) + "\n" + Arrays.toString(statusNew));
+            String[] categNew = ArrayUtils.remove(categWords, pos);
+            Log.d(LOG_TAG, "new arrays: " + Arrays.toString(nameNew) + "\n" + Arrays.toString(costNew) + "\n" + Arrays.toString(statusNew)
+            + "\n" + Arrays.toString(categNew));
 
             StringBuilder bName = new StringBuilder();
             StringBuilder bCost = new StringBuilder();
             StringBuilder bStatus = new StringBuilder();
+            StringBuilder bCateg = new StringBuilder();
 
             for (int i = 0; i < nameNew.length; i++) {
                 bName = bName.append(nameNew[i]).append(",");
                 bCost = bCost.append(costNew[i]).append(",");
                 bStatus = bStatus.append(statusNew[i]).append(",");
+                bCateg = bCateg.append(categNew[i]).append(",");
             }
 
-            Log.d(LOG_TAG, "stringbuilder test:" + bName.toString() + " " + bCost.toString() + " " + bStatus.toString());
+            Log.d(LOG_TAG, "stringbuilder test:" + bName.toString() + " " + bCost.toString() + " " + bStatus.toString() + " " + bCateg.toString());
 
             // Update to memory
             editor.clear();
             editor.putString("name", bName.toString());
             editor.putString("cost", bCost.toString());
             editor.putString("status", bStatus.toString());
+            editor.putString("category", bCateg.toString());
             editor.putInt("old_budget", budget);
             editor.putInt("budget", budgetNew);
             editor.commit();
@@ -245,17 +252,19 @@ public class MainActivity extends AppCompatActivity {
         String listData = sp.getString("name", null);
         String listData2 = sp.getString("cost", null);
         String listData3 = sp.getString("status", null);
+        String listData4 = sp.getString("category", null);
         Log.d(LOG_TAG, "loadPrefs: listData listData2: " + listData + " " + listData2 + " " + listData3);
-        Log.d(LOG_TAG, "loadPrefs: listData3: " + listData3);
+        Log.d(LOG_TAG, "loadPrefs: listData4: " + listData4);
 
         refreshCtr();
 
         // Parse strings
-        if(listData!=null && listData2 !=null && listData3 != null){
+        if(listData !=null && listData2 != null && listData3 != null && listData4 != null){
             //animateCtr(sp.getInt("old_budget", 0), sp.getInt("budget", 0), tv);
             String[] nameWords = listData.split(",");
             String[] costWords = listData2.split(",");
             String[] statusWords = listData3.split(",");
+            String[] categWords = listData4.split(",");
             // Split returns at least one element so need to prevent showing empty string
             if(nameWords[0].equals("")) return;
             for (int k=0; k<nameWords.length; k++){
@@ -265,10 +274,10 @@ public class MainActivity extends AppCompatActivity {
 
             // Add item to list
             for(int i=0; i<nameWords.length; i++){
-                    aa.add(new ListElement(nameWords[i], costWords[i], statusWords[i]));
+                    aa.add(new ListElement(nameWords[i], costWords[i], statusWords[i], categWords[i]));
             }
             for (ListElement item : itemList){
-                Log.d(LOG_TAG, "inCurrentList: " + item.name + " " + item.cost + " " + item.status);
+                Log.d(LOG_TAG, "inCurrentList: " + item.name + " " + item.cost + " " + item.status + " " + item.category);
                 Log.d(LOG_TAG, "itemList size: " + itemList.size());
             }
         }

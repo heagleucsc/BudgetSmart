@@ -16,11 +16,10 @@
         android:layout_marginTop="2dp"
         app:layout_constraintTop_toBottomOf="@+id/budgetCurrent"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@+id/hyphen"
-        android:layout_marginLeft="0dp" />
+        app:layout_constraintLeft_toRightOf="@+id/hyphen" />
 
     <ListView
-        android:layout_width="380dp"
+        android:layout_width="0dp"
         android:layout_height="409dp"
         android:id="@+id/listView"
         android:paddingBottom="5dp"
@@ -28,13 +27,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         app:layout_constraintTop_toBottomOf="@+id/hyphen"
-        tools:layout_editor_absoluteY="102dp"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent">
     </ListView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/action_add_item"
-        android:layout_width="51dp"
+        android:layout_width="49dp"
         android:layout_height="49dp"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="16dp"
@@ -47,8 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:pressedTranslationZ="12dp"
-        tools:layout_editor_absoluteX="293dp"
-        tools:layout_editor_absoluteY="446dp" />
+        android:layout_marginEnd="16dp" />
 
     <TextView
         android:id="@+id/budgetCurrent"
@@ -64,7 +64,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintBottom_toBottomOf="@+id/hyphen" />
+        app:layout_constraintBottom_toBottomOf="@+id/hyphen"
+        android:layout_marginStart="136dp" />
 
     <TextView
         android:id="@+id/intervalStart"
@@ -76,7 +77,9 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/hyphen"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/hyphen" />
+        app:layout_constraintRight_toLeftOf="@+id/hyphen"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="4dp" />
 
     <TextView
         android:id="@+id/hyphen"
@@ -88,6 +91,8 @@
         app:layout_constraintBottom_toTopOf="@+id/listView"
         android:layout_marginTop="2dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintLeft_creator="1" />
 
 </android.support.constraint.ConstraintLayout>
