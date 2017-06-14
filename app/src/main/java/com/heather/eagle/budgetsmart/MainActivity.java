@@ -142,12 +142,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         appInfo = AppInfo.getInstance(this);
 
+
+
         // Set initial budget
         if(budgetEverSetChecker == 1) {
+            Bundle bundle = getIntent().getExtras();
+            int budget = Integer.parseInt(bundle.getString("initBudget"));
+
             SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
             SharedPreferences.Editor editor = sp.edit();
-            editor.putInt("budget", initBudget);
-            Log.d(LOG_TAG, "initial budget: " + initBudget);
+            //editor.putInt("budget", initBudget);
+            //Log.d(LOG_TAG, "initial budget: " + initBudget);
+            editor.putInt("budget", budget);
+            Log.d(LOG_TAG, "initial budget: " + budget);
             editor.commit();
             budgetEverSetChecker = 0;
         }

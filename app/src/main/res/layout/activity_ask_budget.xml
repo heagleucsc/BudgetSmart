@@ -30,18 +30,18 @@
         />
 
     <EditText
-        android:inputType="numberDecimal"
         android:id="@+id/editBudgetV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:ems="10"
-        android:textColor="@color/white_greyish"
-        android:text="300"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"/>
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Enter a budget"
+        android:inputType="numberDecimal"
+        android:textColor="@color/white_greyish"
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/continue_budget"
@@ -51,7 +51,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="120dp"
         android:background="@color/white_greyish"
-        android:onClick="OnsaveBudget"
+        android:onClick="onSaveBudget"
         android:text="Continue"
         android:textColor="@color/background_color" />
 

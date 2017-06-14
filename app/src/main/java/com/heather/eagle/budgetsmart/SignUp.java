@@ -67,7 +67,7 @@ public class SignUp extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(SignUp.this,"Successfully registered",Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(SignUp.this, AskBudget_Activity.class));
+                            startActivity(new Intent(SignUp.this, AskBudget.class));
                             finish();
                         }
 
