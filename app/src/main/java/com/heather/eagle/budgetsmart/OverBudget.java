@@ -261,7 +261,9 @@ public class OverBudget extends AppCompatActivity {
 
             // Add item to list
             for(int i=0; i<nameWords.length; i++){
-                aa.add(new ListElement(nameWords[i], costWords[i], statusWords[i], categWords[i]));
+                if(statusWords[i].equals("optional")){
+                    aa.add(new ListElement(nameWords[i], costWords[i], statusWords[i], categWords[i]));
+                }
             }
             for (ListElement item : itemList){
                 Log.d(LOG_TAG, "in OverBudget: inCurrentList: " + item.name + " " + item.cost + " " + item.status + " " + item.category);

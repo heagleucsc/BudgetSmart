@@ -12,6 +12,6 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="piechart_title">Spending by Category</string>
-    <string name="OverBudget">You are over budget</string>
+    <string name="OverBudget">You are over budget!</string>
     <string name="delete">Please delete $ of items</string>
 </resources>
