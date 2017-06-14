@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ItemFormActivity" />
-        <activity android:name=".PieChartActivity"></activity>
+        <activity android:name=".PieChartActivity" />
+        <activity android:name=".OverBudget"></activity>
     </application>
 
 </manifest>

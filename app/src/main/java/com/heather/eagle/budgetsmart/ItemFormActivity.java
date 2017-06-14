@@ -109,9 +109,6 @@ public class ItemFormActivity extends AppCompatActivity {
         //update budget variable
         int old_budget = sp.getInt("budget", 0);
         int budget = old_budget - costp;
-        if(budget < 0){
-            //
-        }
 
 
         // Save to memory
@@ -126,10 +123,16 @@ public class ItemFormActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(),"Item added", Toast.LENGTH_SHORT).show();
 
-        // Go back to main activity
-        Intent intent = new Intent(this, MainActivity.class);
-        Log.d(LOG_TAG,"Name and cost added:" + name + cost);
-        startActivity(intent);
+        // If user goes over budget, they are prompted to delete a planned optional purchase
+        if(budget < 0){
+            Intent intent = new Intent(this, OverBudget.class);
+            startActivity(intent);
+        }else {
+            // Go back to main activity
+            Intent intent = new Intent(this, MainActivity.class);
+            Log.d(LOG_TAG, "Name and cost added:" + name + cost);
+            startActivity(intent);
+        }
     }
 
     public void onClickOpt(View v){ status = "optional"; }
