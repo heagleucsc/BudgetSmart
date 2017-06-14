@@ -19,10 +19,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import android.os.Handler;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -30,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String MYPREFS = "myprefs";
     private static final String LOG_TAG = "budgetSmart";
+    private TextView txtDay, tv_end;
+    private Handler handler;
+    private Runnable runnable;
     public static TextView budgetCounter;
     public static String name;
     public static String cost;     // later may want to deal with as double?
@@ -123,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         appInfo = AppInfo.getInstance(this);
-
+        txtDay = (TextView) findViewById(R.id.endDate);
+        tv_end= (TextView) findViewById(R.id.startDate);
         budgetCounter = (TextView) findViewById(R.id.budgetCurrent);
         lv = (ListView) findViewById(R.id.listView);
         refreshCtr();
@@ -132,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         //loadPreferences();
         lv.setAdapter(aa);
         aa.notifyDataSetChanged();
+        countDown();
     }
 
     @Override
@@ -278,9 +289,43 @@ public class MainActivity extends AppCompatActivity {
 
     // logout.
     public void onLogOut(View v){
-        firebaseAuth.signOut();
+        //firebaseAuth.signOut();
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
+    public void countDown(){
+        handler = new Handler();
+        runnable = new Runnable(){
+            @Override
+            public void run() {
+                handler.postDelayed(this, 1000);
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(
+                            "yyyy-MM-dd");
+                    // Please here set your event date//YYYY-MM-DD
+                    Date futureDate = dateFormat.parse("2019-5-30");
+                    Date currentDate = new Date();
+                    if (!currentDate.after(futureDate)) {
+                        long diff = futureDate.getTime()
+                                - currentDate.getTime();
+                        long days = diff / (24 * 60 * 60 * 1000);
+                        diff -= days * (24 * 60 * 60 * 1000);
+                        long hours = diff / (60 * 60 * 1000);
+                        diff -= hours * (60 * 60 * 1000);
+                        long minutes = diff / (60 * 1000);
+                        diff -= minutes * (60 * 1000);
+                        long seconds = diff / 1000;
+                        txtDay.setText("" + String.format("%02d" +" days left", days));
+                    } else {
+                        tv_end.setVisibility(View.VISIBLE);
+                        tv_end.setText("Times Up!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        handler.postDelayed(runnable, 1 * 1000);
+        }
 
 }

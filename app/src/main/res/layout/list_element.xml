@@ -32,8 +32,8 @@
 
     <Button
         android:id="@+id/btn_del"
-        android:layout_width="113dp"
-        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
         android:text="Delete" />
 
 
