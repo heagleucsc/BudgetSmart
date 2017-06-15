@@ -54,7 +54,7 @@ public class AskBudget extends AppCompatActivity {
         //bundle.putString("initBudget", budgetVal);
         //intent.putExtras(bundle);
         //editor.putBoolean("activity_executed", true);
-        //editor.putString("initBudget", budgetVal);
+        editor.putString("initBudget", budgetVal);
         editor.commit();
         Intent intent = new Intent(this, setDate.class);
         startActivity(intent);

@@ -10,8 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- <activity android:name=".Login"> -->
-        <activity android:name=".AskBudget"> <!-- </activity> -->
+        <activity android:name=".AskBudget">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +21,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ItemFormActivity" />
         <activity android:name=".PieChartActivity" />
-        <!-- <activity android:name=".SignUp"/> -->
+        <activity android:name=".SignUp"/>
         <activity android:name=".OverBudget" />
         <activity android:name=".setDate"></activity>
 
