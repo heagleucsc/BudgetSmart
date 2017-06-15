@@ -99,7 +99,7 @@ public class Login extends AppCompatActivity {
 
     public void OnClickSignUp(View view){
 
-        Intent intent = new Intent(this, SignUp.class);
+        Intent intent = new Intent(this, setDate.class);
         startActivity(intent);
     }
 

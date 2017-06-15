@@ -30,6 +30,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
+
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String MYPREFS = "myprefs";
     private static final String LOG_TAG = "budgetSmart";
     public static int initBudget = 500;
-    public static int budgetEverSetChecker = 1;
+    public static int budgetEverSetChecker = 0;
     public static TextView budgetCounter;
     public static String name;
     public static String cost;     // later may want to deal with as double?
@@ -141,6 +144,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         appInfo = AppInfo.getInstance(this);
+
+        TextView startInterval = (TextView)findViewById(R.id.intervalStart);
+        startInterval.setText(getStartDate());
+
+        TextView endInterval = (TextView)findViewById(R.id.intervalEnd);
+        endInterval.setText(getEndDate());
+
 
 
         // Set initial budget
@@ -411,5 +421,32 @@ public class MainActivity extends AppCompatActivity {
         }
 
         aa.notifyDataSetChanged();
+    }
+
+    //Check if current time is in the budget
+    public boolean getCurrentTime(){
+        Date today = new Date();
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        long end = sp.getLong("End",0);
+        Date e = new Date(end);
+        return e.after(today);
+    }
+
+    //Convert start date to proper date
+    public String getStartDate(){
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        long start = sp.getLong("Start",0);
+        Date s = new Date(start);
+        String startDate = s.getMonth() +"/"+ s.getDay() + "/" +s.getYear();
+        return startDate;
+    }
+
+    //Convert end date to proper date
+    public String getEndDate(){
+        SharedPreferences sp = getSharedPreferences(MYPREFS, 0);
+        long end = sp.getLong("End",0);
+        Date e = new Date(end);
+        String endDate = e.getMonth() +"/"+ e.getDay() + "/" +e.getYear();
+        return endDate;
     }
 }

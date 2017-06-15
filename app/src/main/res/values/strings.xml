@@ -14,4 +14,10 @@
     <string name="piechart_title">Spending by Category</string>
     <string name="OverBudget">You are over budget!</string>
     <string name="delete">Please delete $ of items</string>
+    <string name="month">Month</string>
+    <string name="weeks">Two Weeks</string>
+    <string name="TimeInterval">Please choose a time interval for your budget:</string>
+    <string name="Week" />
+    <string name="week">One Week</string>
+    <string name="set">Set</string>
 </resources>
